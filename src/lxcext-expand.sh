@@ -20,7 +20,7 @@ function op_expand() {
     exit 1
   fi
 
-  if [ ! $(lxc-ls --stopped --line | grep -Fx cname$) ]; then
+  if ! [ $(lxc-ls --stopped --line | grep -Fx cname$) ]; then
     echo "Container: $cname has not been stoped"
     exit 1
   fi
