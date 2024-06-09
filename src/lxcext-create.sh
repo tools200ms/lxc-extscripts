@@ -39,7 +39,10 @@ EOF
   # mount
   MOUNT_DIR=/mnt/lxc/$CONTAINER_NAME
   $RUN mkdir -p $MOUNT_DIR
-  $RUN mount /dev/mapper/$VGNAME/$cname $MOUNT_DIR
+
+  dev_path="/dev/mapper/$VGNAME-"$(echo $cname | sed "s/-/--/g")
+
+  $RUN mount $dev_path $MOUNT_DIR
 
   $RUN cp -a /etc/resolv.conf $MOUNT_DIR/etc/
 

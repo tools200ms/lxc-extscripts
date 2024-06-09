@@ -25,7 +25,9 @@ function op_expand() {
     exit 1
   fi
 
-  $RUN lvextend -L "+$size_incr" /dev/mapper/$VGNAME/$cname
-  $RUN e2fsck -f /dev/mapper/$VGNAME/$cname
-  $RUN resize2fs /dev/mapper/$VGNAME/$cname
+  dev_path="/dev/mapper/$VGNAME-"$(echo $cname | sed "s/-/--/g")
+
+  $RUN lvextend -L "+$size_incr" $dev_path
+  $RUN e2fsck -f $dev_path
+  $RUN resize2fs $dev_path
 }

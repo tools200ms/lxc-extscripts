@@ -19,8 +19,10 @@ function op_smount() {
   $RUN lxc-wait -n $cname -s STOPPED
 
   MOUNT_DIR=/mnt/lxc/$cname
+  dev_path="/dev/mapper/$VGNAME-"$(echo $cname | sed "s/-/--/g")
+
   $RUN mkdir -p $MOUNT_DIR
-  $RUN mount /dev/mapper/$VGNAME/$cname $MOUNT_DIR
+  $RUN mount $dev_path $MOUNT_DIR
 }
 
 function op_umounts() {
