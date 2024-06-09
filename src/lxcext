@@ -1,0 +1,47 @@
+#!/bin/bash
+
+if [ -n "$PRETEND" ] && [[ $(echo "$PRETEND" | tr '[:upper:]' '[:lower:]') =~ ^y|yes|1|on$ ]]; then
+  RUN="echo [pretend] "
+else
+  RUN=
+fi
+
+[ -n "$DEBUG" ] && [[ $(echo "$DEBUG" | tr '[:upper:]' '[:lower:]') =~ ^y|yes|1|on$ ]] && \
+        set -xe || set -e
+
+if [ -z $VGNAME ] ; then
+  VGNAME="vga"
+fi
+
+BASE_SCRIPT="$(basename "$0")"
+script_dir="$(dirname "$0")"
+
+for script in $(ls $script_dir/$BASE_SCRIPT-*.sh); do
+  if [ -x $script ]; then
+    source $script
+  fi
+done
+
+
+function print_help() {
+  cat << EOF
+$BASE_SCRIPT ls
+      ls - list LXC containers
+EOF
+  mnt_print_help
+  exp_print_help
+  cra_print_help
+}
+
+function op_ls() {
+  lxc-ls -f
+}
+
+if [ -n "$1" ] && [[ "$1" =~ ^[a-zA-Z0-9]{1,128}$ ]] ;  then
+  op=$1
+  op_$op $2 $3 $4
+else
+  print_help
+fi
+
+exit 0
