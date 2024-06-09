@@ -18,12 +18,9 @@ function op_smount() {
   $RUN lxc-stop -n $cname
   $RUN lxc-wait -n $cname -s STOPPED
 
-  $RUN mkdir -p /mnt/lxc/$cname
-  $RUN mount /dev/mapper/vg1com-$cname /mnt/lxc/$cname
-
   MOUNT_DIR=/mnt/lxc/$cname
   $RUN mkdir -p $MOUNT_DIR
-  $RUN mount /dev/mapper/$VGNAME-$CONTAINER_NAME $MOUNT_DIR
+  $RUN mount /dev/mapper/$VGNAME/$cname $MOUNT_DIR
 }
 
 function op_umounts() {
