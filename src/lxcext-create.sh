@@ -11,8 +11,13 @@ ARCH="amd64"
 
 function cra_print_help() {
   cat << EOF
-$BASE_SCRIPT create <lxc cont. name> <ip addr> <gateway>
+$BASE_SCRIPT create <target> <lxc cont. name> <ip addr> <gateway>
         create  - create new container
+          target:
+            web_revproxy
+            web_wp
+            web_wp-multi
+            postfix
 EOF
 }
 
@@ -65,7 +70,17 @@ EOF
 
   # Install NGINX inside the container
   $RUN lxc-attach -n $cname -- apt-get update
-  $RUN lxc-attach -n $cname -- apt-get install -y nginx-light php-fpm php-curl php-gd php-intl php-mbstring php-soap php-xml php-xmlrpc php-zip mariadb-server
+
+  # targets:
+  # opendkim-genkey -b 2048 -s s-xxxxxx -D /etc/postfix/keys/<short name> -d <domain>
+
+  $RUN lxc-attach -n $cname -- apt-get install -y nginx-light php-fpm php-curl php-gd php-intl php-mbstring php-mysql php-soap php-xml php-xmlrpc php-zip \
+            mariadb-server
+
+  $RUN mysql_install_db --auth-root-authentication-method=socket --skip-test-db --user=mysql
+  # CREATE USER 'wp'@'localhost' IDENTIFIED BY '...';
+  # GRANT ALL PRIVILEGES ON mysql.* TO 'wp'@'localhost';
+  # DROP USER 'mysql'@'localhost';
 
   $RUN lxc-attach -n $cname -- wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -O /usr/local/bin/wp
   $RUN lxc-attach -n $cname -- chmod +x /usr/local/bin/wp
