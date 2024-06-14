@@ -15,7 +15,7 @@ EOF
 function op_smount() {
   cname=$1
 
-  if [ -n $(lxc-info -n $cname -s | grep -e 'STOPPED$') ]; then
+  if [ -n "$(lxc-info -n $cname -s | grep -e 'STOPPED$')" ]; then
     $RUN lxc-stop -n $cname
     $RUN lxc-wait -n $cname -s STOPPED
   else
