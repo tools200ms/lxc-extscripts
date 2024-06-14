@@ -15,8 +15,12 @@ EOF
 function op_smount() {
   cname=$1
 
-  $RUN lxc-stop -n $cname
-  $RUN lxc-wait -n $cname -s STOPPED
+  if [ -n $(lxc-info -n $cname -s | grep -e 'STOPPED$') ]; then
+    $RUN lxc-stop -n $cname
+    $RUN lxc-wait -n $cname -s STOPPED
+  else
+    echo "Container already stopped"
+  fi
 
   MOUNT_DIR=/mnt/lxc/$cname
   dev_path="/dev/mapper/$VGNAME-"$(echo $cname | sed "s/-/--/g")
