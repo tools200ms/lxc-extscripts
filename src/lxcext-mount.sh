@@ -15,7 +15,7 @@ EOF
 function op_smount() {
   cname=$1
 
-  if [ -n "$(lxc-info -n $cname -s | grep -e 'STOPPED$')" ]; then
+  if [ -z "$(lxc-info -n $cname -s | grep -e 'STOPPED$')" ]; then
     $RUN lxc-stop -n $cname
     $RUN lxc-wait -n $cname -s STOPPED
   else
@@ -27,6 +27,8 @@ function op_smount() {
 
   $RUN mkdir -p $MOUNT_DIR
   $RUN mount $dev_path $MOUNT_DIR
+
+  echo "root fs of $cname mounted at: $MOUNT_DIR"
 }
 
 function op_umounts() {
