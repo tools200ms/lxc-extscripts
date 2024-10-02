@@ -18,6 +18,7 @@ $BASE_SCRIPT create <target> <lxc cont. name> <ip addr> <gateway>
             web_wp
             web_wp-multi
             postfix
+
 EOF
 }
 

@@ -9,11 +9,18 @@ function mnt_print_help() {
 $BASE_SCRIPT smount|umounts <lxc cont. name>
         smount  - stop container and mount its root fs
         umounts - umount continer's root fs and start it
+
 EOF
 }
 
 function op_smount() {
-  cname=$1
+  local cname=$1
+
+  # [[ "${cname}" =~ $LXC_CONT_NAME_RE ]]
+  if [ -z "${cname}" ]; then
+    echo "Provide continer name, name must be proper"
+    exit 2
+  fi
 
   if [ -z "$(lxc-info -n $cname -s | grep -e 'STOPPED$')" ]; then
     $RUN lxc-stop -n $cname

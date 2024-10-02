@@ -9,9 +9,12 @@ fi
 [ -n "$DEBUG" ] && [[ $(echo "$DEBUG" | tr '[:upper:]' '[:lower:]') =~ ^y|yes|1|on$ ]] && \
         set -xe || set -e
 
+
 if [ -z $VGNAME ] ; then
   VGNAME="vga"
 fi
+
+LXC_CONT_NAME_RE=^[0-9a-zA-Z_\-\.]+$
 
 BASE_SCRIPT="$(basename "$0")"
 script_dir="$(dirname "$0")"
@@ -38,8 +41,14 @@ function op_ls() {
 }
 
 if [ -n "$1" ] && [[ "$1" =~ ^[a-zA-Z0-9]{1,128}$ ]] ;  then
-  op=$1
-  op_$op $2 $3 $4
+  op_fun=op_$1
+
+  if ! declare -F "$op_fun" > /dev/null; then
+    echo "Undefined operation: $1"
+    exit 1
+  fi
+
+  $op_fun $2 $3 $4
 else
   print_help
 fi
