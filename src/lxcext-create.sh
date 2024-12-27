@@ -2,12 +2,13 @@
 
 CONTAINER_NAME="srv.web.site-datm"
 
+# Settings:
+# Defaults for create:
 FSSIZE=2G
-
 DIST="devuan"
 RELEASE="daedalus"
 ARCH="amd64"
-
+GETEWAY_DEV="br1"
 
 function cra_print_help() {
   cat << EOF
@@ -33,6 +34,7 @@ function op_create() {
         -t download -- -d $DIST -r $RELEASE -a $ARCH
 
 
+  "lxc.net.0.link"
   if [ -z $RUN ]; then
     cat <<EOF >> /var/lib/lxc/$cname/config
 
@@ -43,7 +45,7 @@ EOF
   fi
 
   # mount
-  MOUNT_DIR=/mnt/lxc/$CONTAINER_NAME
+  MOUNT_DIR=/mnt/lxc/$cname
   $RUN mkdir -p $MOUNT_DIR
 
   dev_path="/dev/mapper/$VGNAME-"$(echo $cname | sed "s/-/--/g")
