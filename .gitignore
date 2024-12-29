@@ -4,9 +4,10 @@
 *.so
 build/
 venv/
+.venv/
 
 release/
-testdata/
+faked_storage/
 
 # Development IDEs:
 .kdev4/

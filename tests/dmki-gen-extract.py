@@ -4,7 +4,7 @@ import sys
 from lxc_extrpy import *
 
 class ExtrPy(unittest.TestCase):
-    def test_extr_DKMI(self):
+    def test_extr_DKMI(self):v
         with open('./tests/selector-test.txt') as file:
             selector, value, comment = extractDKMITxt(file.read())
 
