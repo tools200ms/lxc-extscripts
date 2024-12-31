@@ -7,11 +7,9 @@ services:
       - ./lxc_ext:/root/lxc_ext/lxc_ext
       - ./tests:/root/lxc_ext/tests
       - ./faked_storage:/root/lxc_ext/faked_storage
-      - ./src/lxcext-expand.sh:/usr/local/bin/lxcext-expand.sh
-      - ./src/lxcext-mount.sh:/usr/local/bin/lxcext-mount.sh
+      #- ./src/lxcext-expand.sh:/usr/local/bin/lxcext-expand.sh
+      #- ./src/lxcext-mount.sh:/usr/local/bin/lxcext-mount.sh
 
-      # create "test block device"
-      # dd if=/dev/zero of=./8g.iso bs=1048576 count=8192
 
     cap_add: ['SYS_ADMIN']
     devices:
