@@ -9,18 +9,18 @@ services:
     cap_add: ['SYS_ADMIN']
     devices:
       - /dev/fuse:/dev/fuse
-      - /dev/loop4:/dev/loop4
+      - /dev/loop4:/dev/loop0
     environment:
       LOOP_DEV: "/dev/loop4"
     security_opt:
       - apparmor=unconfined
     privileged: true
 
-    deploy:
-      resources:
-        reservations:
-          generic_resources:
-            - discrete_resource_spec:
-                kind: storage
-                value: 20G
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      generic_resources:
+    #        - discrete_resource_spec:
+    #            kind: storage
+    #            value: 20G
 

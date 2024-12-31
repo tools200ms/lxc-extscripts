@@ -9,8 +9,8 @@
 # Default VG name:
 VG_NAME="vg4test_lxc"
 
-STOR_DIR="/var"
-STOR_DIR="/root/lxc_ext/faked_storage"
+#STOR_DIR="/var"
+STOR_DIR="/root/faked_storage"
 
 if [ -z "$LOOP_DEV" ] || [ ! -b "$LOOP_DEV" ]; then
   echo "'$LOOP_DEV' is not blockdevice!"
@@ -28,6 +28,10 @@ function create_iso_image() {
   $RUN dd if=/dev/zero of=${STOR_ISO} bs=1048576 count=${STOR_SIZE_MB}
 }
 
+function create_loopbackdev() {
+  $RUN losetup ${LOOP_DEV} ${STOR_ISO}
+}
+
 function create_logical_group() {
   $RUN pvcreate ${LOOP_DEV}
   $RUN vgcreate ${VG_NAME} ${LOOP_DEV}
@@ -40,7 +44,7 @@ else
   FOUND_IMG=true
 fi
 
-$RUN losetup ${LOOP_DEV} ${STOR_ISO}
+create_loopbackdev
 
 if ! $FOUND_IMG; then
   create_logical_group
