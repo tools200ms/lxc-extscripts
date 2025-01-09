@@ -1,0 +1,10 @@
+
+[default]
+fssize: 500M
+
+dist: devuan
+release: daedalus
+arch: amd64
+
+vgname: vg4test_lxc
+

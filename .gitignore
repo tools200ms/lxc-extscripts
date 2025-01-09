@@ -6,6 +6,10 @@ build/
 venv/
 .venv/
 
+# idnore configuration files
+*.ini
+*.conf
+
 release/
 faked_storage/
 

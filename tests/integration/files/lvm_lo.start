@@ -11,18 +11,25 @@ VG_NAME="vg4test_lxc"
 
 #STOR_DIR="/var"
 STOR_DIR="/root/faked_storage"
+STOR_SIZE_MB=2000
+STOR_FILE_NAME="test_lxcext.iso"
 
-if [ -z "$LOOP_DEV" ] || [ ! -b "$LOOP_DEV" ]; then
-  echo "'$LOOP_DEV' is not blockdevice!"
-  exit 1
-else
+
+if [ -z "$LOOP_DEV" ]; then
+  # Default loopdev.
   LOOP_DEV="/dev/loop0"
 fi
 
-STOR_ISO=${STOR_DIR}/3g.iso
-STOR_SIZE_MB=2000
+if [ ! -b "$LOOP_DEV" ]; then
+  echo "'$LOOP_DEV' is not blockdevice!"
+  exit 1
+fi
+
+
+STOR_ISO=${STOR_DIR}/${STOR_FILE_NAME}
 FOUND_IMG=false
 
+# function definitions
 function create_iso_image() {
   # create "test block device"
   $RUN dd if=/dev/zero of=${STOR_ISO} bs=1048576 count=${STOR_SIZE_MB}
@@ -37,6 +44,65 @@ function create_logical_group() {
   $RUN vgcreate ${VG_NAME} ${LOOP_DEV}
 }
 
+function purge_teststorage() {
+  # Check if the volume group exists
+  if ! vgdisplay "$VG_NAME" &>/dev/null; then
+    echo "Volume Group $VG_NAME does not exist."
+    return 2
+  fi
+
+  # Remove all logical volumes from the volume group
+  echo "Removing all logical volumes from Volume Group $VG_NAME..."
+  $RUN lvremove -y "$VG_NAME" &>/dev/null
+  if [[ $? -ne 0 ]]; then
+    echo "Failed to remove logical volumes from $VG_NAME."
+    return 3
+  fi
+
+  echo "All logical volumes removed successfully."
+
+  # Remove the volume group
+  echo "Removing Volume Group $VG_NAME..."
+  $RUN vgremove -y "$VG_NAME" &>/dev/null
+  if [[ $? -ne 0 ]]; then
+    echo "Failed to remove Volume Group $VG_NAME."
+    return 4
+  fi
+
+  echo "Volume Group $VG_NAME removed successfully."
+
+  # Check if the physical volume exists
+  if ! pvdisplay "$LOOP_DEV" &>/dev/null; then
+    echo "Physical Volume $LOOP_DEV does not exist."
+    return 5
+  fi
+
+  # Remove the physical volume
+  echo "Removing Physical Volume $LOOP_DEV..."
+  $RUN pvremove -y "$LOOP_DEV" &>/dev/null
+  if [[ $? -ne 0 ]]; then
+    echo "Failed to remove Physical Volume $LOOP_DEV."
+    exit 6
+  fi
+  echo "Physical Volume $LOOP_DEV removed successfully."
+
+  echo "Removing file: ${LOOP_DEV}"
+  $RUN losetup -d ${LOOP_DEV}
+  $RUN rm ${LOOP_DEV}
+
+  echo " === All done, testing storage file removed."
+}
+
+# script start:
+
+create_logical_group
+exit 0
+
+if $(losetup -a | grep -qe "^${LOOP_DEV}:"); then
+  # Loop device mountd, umount it:
+  $RUN losetup -d ${LOOP_DEV}
+fi
+
 if [ ! -f ${STOR_ISO} ]; then
   create_iso_image
 else
@@ -46,7 +112,8 @@ fi
 
 create_loopbackdev
 
-if ! $FOUND_IMG; then
+if ! $($FOUND_IMG); then
+  echo "Creating testing VG ('$VG_NAME') at loopback device"
   create_logical_group
 fi
 

@@ -4,6 +4,8 @@ services:
     build:
       context: tests/integration/
     volumes:
+      - ./lxcext.conf:/root/lxcext.conf
+      - ./lxcext.py:/root/lxcext.py
       - ./lxc_ext:/root/lxc_ext/lxc_ext
       - ./tests:/root/lxc_ext/tests
       - ./faked_storage:/root/lxc_ext/faked_storage

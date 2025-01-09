@@ -9,9 +9,9 @@ services:
     cap_add: ['SYS_ADMIN']
     devices:
       - /dev/fuse:/dev/fuse
-      - /dev/loop4:/dev/loop0
+      - /dev/loop0:/dev/loop0
     environment:
-      LOOP_DEV: "/dev/loop4"
+      LOOP_DEV: "/dev/loop0"
     security_opt:
       - apparmor=unconfined
     privileged: true
