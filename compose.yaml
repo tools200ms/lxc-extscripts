@@ -6,17 +6,16 @@ services:
     volumes:
       - ./lxcext.conf:/root/lxcext.conf
       - ./lxcext.py:/root/lxcext.py
-      - ./lxc_ext:/root/lxc_ext/lxc_ext
-      - ./tests:/root/lxc_ext/tests
-      - ./faked_storage:/root/lxc_ext/faked_storage
-      #- ./src/lxcext-expand.sh:/usr/local/bin/lxcext-expand.sh
-      #- ./src/lxcext-mount.sh:/usr/local/bin/lxcext-mount.sh
-
+      - ./lxc_ext/:/root/lxc_ext/
+      - ./tests/:/root/tests/
+      - ./faked_storage/:/root/faked_storage/
 
     cap_add: ['SYS_ADMIN']
     devices:
       - /dev/fuse:/dev/fuse
-
+      - /dev/loop0:/dev/loop0
+    environment:
+      LOOP_DEV: "/dev/loop0"
     security_opt:
       - apparmor=unconfined
     privileged: true

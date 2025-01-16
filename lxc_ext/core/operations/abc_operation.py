@@ -34,5 +34,5 @@ class Operation(ABC):
                     return subclass  # Return the class constructor
 
         # If no matching class is found, raise an exception
-        raise ValueError(f"No non-abstract subclass of Operation found for name '{name}'.")
+        raise ValueError(f"Unknown operation: '{name}'.")
 

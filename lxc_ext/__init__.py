@@ -1,4 +1,4 @@
 
-from .lib.args_parser import ArgsParser
 
+from .lib.args_parser import *
 

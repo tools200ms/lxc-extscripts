@@ -20,12 +20,6 @@ if [ -z "$LOOP_DEV" ]; then
   LOOP_DEV="/dev/loop0"
 fi
 
-if [ ! -b "$LOOP_DEV" ]; then
-  echo "'$LOOP_DEV' is not blockdevice!"
-  exit 1
-fi
-
-
 STOR_ISO=${STOR_DIR}/${STOR_FILE_NAME}
 FOUND_IMG=false
 
@@ -33,10 +27,6 @@ FOUND_IMG=false
 function create_iso_image() {
   # create "test block device"
   $RUN dd if=/dev/zero of=${STOR_ISO} bs=1048576 count=${STOR_SIZE_MB}
-}
-
-function create_loopbackdev() {
-  $RUN losetup ${LOOP_DEV} ${STOR_ISO}
 }
 
 function create_logical_group() {
@@ -95,12 +85,17 @@ function purge_teststorage() {
 
 # script start:
 
-create_logical_group
-exit 0
-
-if $(losetup -a | grep -qe "^${LOOP_DEV}:"); then
-  # Loop device mountd, umount it:
-  $RUN losetup -d ${LOOP_DEV}
+if [ ! -b "$LOOP_DEV" ]; then
+  echo "'$LOOP_DEV' does not exists, creating"
+  LO_MINOR=$(echo "$LOOP_DEV" | awk -F'loop' '{print $2}')
+  mknod "$LOOP_DEV" b 7 $LO_MINOR
+else
+  if $(losetup -a | grep -qe "^${LOOP_DEV}:"); then
+    # It is possible that image file might be deleted
+    # while loop device might exist, preferentially delete
+    # loop device
+    $RUN losetup -d ${LOOP_DEV}
+  fi
 fi
 
 if [ ! -f ${STOR_ISO} ]; then
@@ -110,9 +105,13 @@ else
   FOUND_IMG=true
 fi
 
-create_loopbackdev
+$RUN losetup ${LOOP_DEV} ${STOR_ISO}
 
-if ! $($FOUND_IMG); then
+if $($FOUND_IMG); then
+  echo "Image already exists: "
+  $RUN pvscan
+  $RUN lvscan
+else
   echo "Creating testing VG ('$VG_NAME') at loopback device"
   create_logical_group
 fi

@@ -19,8 +19,11 @@ class ConfParser:
         for section in config.sections():
             section_items = {}
             for key, value in config[section].items():
+                # NEXT TODO:
                 section_items[key] = value
+
             result[section] = section_items
+
         return result
 
 

@@ -14,4 +14,4 @@ ENV PKGS="$PKGS_LVM $PKGS_LXC $PKGS_SYS $PKGS_DEV"
 RUN apk add $PKGS
 COPY ./files/lvm_lo.start /etc/local.d/
 
-
+WORKDIR /root
