@@ -1,4 +1,5 @@
 import configparser
+import importlib
 import os.path
 
 
@@ -17,10 +18,37 @@ class ConfParser:
 
         result = {}
         for section in config.sections():
+
+            if len(section) > 128 or not (section.isalnum() or '_' in section):
+                raise SyntaxError("Incorrect section name")
+
+            try:
+                # can raise ModuleNotFoundError
+                module = importlib.import_module('lxc_ext.lib.atoms.' + section)
+            except ModuleNotFoundError as e:
+                raise SyntaxError(f"Wrong section name: {section}") from e
+
+            if section in result:
+                raise SyntaxError(f"Redefined section: {section}")
+
             section_items = {}
             for key, value in config[section].items():
-                # NEXT TODO:
-                section_items[key] = value
+                if len(key) > 128 or not (key.isalnum() or '_' in key):
+                    raise SyntaxError(f"Incorrect key name for section {section}")
+
+                try:
+                    # can raise 'AttributeError'
+                    cls = getattr(module, key)
+                except AttributeError as e:
+                    raise SyntaxError(f"Wrong key name: '{section}.{key}'") from e
+
+                if key in section_items:
+                    raise SyntaxError(f"Redefined key '{key}' from section '{section}'")
+
+                if len(value) > 512:
+                    raise SyntaxError(f"Value of {section}.{key} too long!")
+
+                section_items[key] = cls.get(value)
 
             result[section] = section_items
 

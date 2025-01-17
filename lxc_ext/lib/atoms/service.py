@@ -59,27 +59,17 @@ class fssize(Atom):
 
 class dist:
     def get(value: str) -> object:
-        if value == "dist":
-            return value
-        else:
-            raise SyntaxError(f"Wrong value: {value}")
+        return value
 
 class release:
     def get(value: str) -> object:
-        if value == "release":
-            return value
-        else:
-            raise SyntaxError(f"Wrong value: {value}")
+        return value
 
 class arch:
     def get(value: str) -> object:
-        if value == "arch":
-            return value
+        return value
 
 class vgname:
     def get(value: str) -> object:
-        if value == "vgname":
-            return value
-        else:
-            raise SyntaxError(f"Wrong value: {value}")
+        return value
 

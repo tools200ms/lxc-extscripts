@@ -1,16 +1,12 @@
 import ipaddress
 
+from lxc_ext.core.IpAssingMethods import IpAssignRandom
 from lxc_ext.lib.atoms.atom import Atom
+from lxc_ext.lib.atoms.factory import Factory
 
 
 class gateway(Atom):
-    @staticmethod
-    def get(value: str) -> object:
-        try:
-            # Attempt to create an IPv4 or IPv6 address object
-            return ipaddress.ip_address(value)
-        except ValueError:
-            raise ValueError(f"'{value}' is not a valid IP address.")
+    get = Factory.getIp
 
 class ip_range(Atom):
     @staticmethod
@@ -32,3 +28,12 @@ class ip_range(Atom):
             raise ValueError("Start IP must be less than or equal to the end IP.")
 
         return (start_ip_obj, end_ip_obj)
+
+class ip_assign_method(Atom):
+    def get(value: str) -> object:
+        match value.lower():
+            case "random":
+                return IpAssignRandom
+
+        raise Exception(f"Invalid value: {str}")
+

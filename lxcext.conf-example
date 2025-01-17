@@ -1,5 +1,5 @@
 
-[default]
+[service name]
 fssize: 500M
 
 dist: devuan
@@ -7,4 +7,10 @@ release: daedalus
 arch: amd64
 
 vgname: vg4test_lxc
+
+# network section can be overwritten from command line
+[network]
+ip_range: 10.0.1.0-10.0.1.10
+gateway: 10.0.0.1
+ip_assign_method: random
 

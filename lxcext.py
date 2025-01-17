@@ -8,11 +8,13 @@ if __name__ == "__main__":
 
     # If '-' or '--help' provided parser exits 'automatically'
     # If wrong arguments are provided parser also exits, but with an error
-    args = ArgsParser.getArguments()
-    conf = ConfParser.Parse(args['config'])
+    args = ArgsParser()
+    conf = ConfParser.Parse(args.getConfigFilePath())
 
-    pprint(args)
-    pprint( conf )
+    options = args.merge(conf)
+
+    pprint(conf)
+    pprint(options)
 
     # execute operation
     #op = Operation.getOperation(args.command)(args, conf)
