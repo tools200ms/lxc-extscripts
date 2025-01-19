@@ -56,7 +56,7 @@ class fssize(Atom):
 
         multiplier = unit_multipliers[unit]
         # TODO: add type
-        return (int)(number * multiplier) / 2 ** 20
+        return round((number * multiplier) / 2 ** 20)
 
 class dist:
     def get(value: str) -> object:
