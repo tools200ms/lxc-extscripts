@@ -55,7 +55,8 @@ class fssize(Atom):
             raise ValueError(f"Unrecognized unit: {unit}")
 
         multiplier = unit_multipliers[unit]
-        return number * multiplier
+        # TODO: add type
+        return (number * multiplier) / 2 ** 20
 
 class dist:
     def get(value: str) -> object:

@@ -23,6 +23,7 @@ class ArgsParser:
         # Create container command
         create_parser = subparsers.add_parser("create", help="Create a new LXC container")
         create_parser.add_argument("name", help="Name of the container")
+        # class: server|client
         create_parser.add_argument("--ip_address", type=Factory.getIp, default=None, help="IP address for the container")
         create_parser.add_argument("--gateway", help="Gateway for the container")
         ArgsParser._add_common_arguments(create_parser)
@@ -64,7 +65,7 @@ class ArgsParser:
             mod_name = cls.__module__
 
             if mod_name.endswith('.service'):
-                key_arr=final_conf['service']
+                key_arr = final_conf['service']
             elif mod_name.endswith('.network'):
                 key_arr = final_conf['network']
             else:

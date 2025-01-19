@@ -52,7 +52,7 @@ class Create(Operation):
         # Step 5: Start the container
         RunPretend.run_command(f"lxc-start -n {name}", debug=debug, pretend=pretend)
         RunPretend.run_command(f"lxc-wait -n {name} -s RUNNING", debug=debug, pretend=pretend)
-        
+
         print(f"Container {name} created and started successfully.")
 
     def verify_integrity(self):

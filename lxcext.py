@@ -4,6 +4,8 @@ from lxc_ext import Operation
 from lxc_ext.lib.args_parser import ArgsParser
 from lxc_ext.lib.conf_parser import ConfParser
 
+# Format:
+# <client|server>.<generic>.<specific>[-detailed]
 
 if __name__ == "__main__":
 
