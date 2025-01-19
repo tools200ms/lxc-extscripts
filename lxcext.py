@@ -1,5 +1,6 @@
 from pprint import pprint
 
+from lxc_ext import Operation
 from lxc_ext.lib.args_parser import ArgsParser
 from lxc_ext.lib.conf_parser import ConfParser
 
@@ -13,8 +14,11 @@ if __name__ == "__main__":
 
     options = args.merge(conf)
 
-    pprint(conf)
-    pprint(options)
+    op = Operation.getOperation(options)
+
+    op.start()
+    #pprint(conf)
+    #pprint(options)
 
     # execute operation
     #op = Operation.getOperation(args.command)(args, conf)

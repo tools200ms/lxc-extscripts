@@ -7,12 +7,6 @@ import subprocess
 CONFIG = load_config()
 
 # Utility functions
-def run_command(command, debug=False, pretend=False):
-    """Run a shell command and print debug information if enabled."""
-    if debug or pretend:
-        print(f"[DEBUG] Command: {command}")
-    if not pretend:
-        subprocess.run(command, shell=True, check=True)
 
 # Module for creating LXC containers
 def create_container(name, ip_address, gateway, config_file="lxc_ext.conf", debug=False, pretend=False):

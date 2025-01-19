@@ -74,9 +74,5 @@ class ArgsParser:
                 # overwrite default value
                 key_arr[ak] = av
 
-        # set command:
-        #final_conf['run']['command'] = \
-        #    Operation.getOperation(self.__args.command)
-
         return final_conf
 
