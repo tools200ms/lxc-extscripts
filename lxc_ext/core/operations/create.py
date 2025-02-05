@@ -47,6 +47,7 @@ class Create(Operation):
 
         # Step 4: Copy necessary files and unmount
         RunPretend.run_command(f"cp -a /etc/resolv.conf {mount_dir}/etc/", debug=debug, pretend=pretend)
+        # Alter: f"/etc/hostname" ?
         RunPretend.run_command(f"umount {mount_dir}", debug=debug, pretend=pretend)
 
         # Step 5: Start the container
@@ -54,6 +55,8 @@ class Create(Operation):
         RunPretend.run_command(f"lxc-wait -n {name} -s RUNNING", debug=debug, pretend=pretend)
 
         print(f"Container {name} created and started successfully.")
+
+        # create user
 
     def verify_integrity(self):
         pass

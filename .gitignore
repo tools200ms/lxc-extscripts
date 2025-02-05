@@ -11,6 +11,7 @@ venv/
 *.conf
 
 release/
+templates/
 faked_storage/
 
 # Development IDEs:
