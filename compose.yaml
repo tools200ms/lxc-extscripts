@@ -6,7 +6,7 @@ services:
     volumes:
       - ./lxcext.conf:/root/lxcext.conf
       - ./lxcext.py:/root/lxcext.py
-      - ./lxc_ext/:/root/lxc_ext/
+      - ./lxcext/:/root/lxcext/
       - ./tests/:/root/tests/
       - ./faked_storage/:/root/faked_storage/
 

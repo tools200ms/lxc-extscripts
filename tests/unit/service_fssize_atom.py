@@ -1,7 +1,7 @@
 import ast
 import unittest
 
-from lxc_ext.lib.atoms.service import fssize
+from lxcext.lib.atoms.service import fssize
 
 
 class TestParseSize(unittest.TestCase):

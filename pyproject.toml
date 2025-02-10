@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "lxcext"
+version = "0.1"
+description = "LXC manager"
+authors = ["Mateusz Piwek Barnaba@200ms.net"]
+homepage = "https://github.com/tools200ms/lxc-extscripts"
+license = "GNU"
+repository = "https://github.com/tools200ms/lxc-extscripts"
+keywords = ["invoice", "generator"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+readme = "README.md"
+packages = [
+    { include = "lxcext", from = "." },
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+requests = "2.32.3"
+

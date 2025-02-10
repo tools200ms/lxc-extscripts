@@ -1,7 +1,7 @@
 import unittest
 import ipaddress
 
-from lxc_ext.lib.atoms.network import ip_range
+from lxcext.lib.atoms.network import ip_range
 
 
 class TestParseIpRangeAddress(unittest.TestCase):

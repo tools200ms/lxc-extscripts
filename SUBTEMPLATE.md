@@ -7,7 +7,9 @@ apt install nginx-light
 apt install php-fpm php-cli php-mysql
 
 # setup logs
-apt install rsyslog rsyslog-gnutls logrotate
+#apt install rsyslog rsyslog-gnutls logrotate
+apt install capnproto
+
 
 # ==========
 

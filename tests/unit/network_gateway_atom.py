@@ -1,7 +1,7 @@
 import unittest
 import ipaddress
 
-from lxc_ext.lib.atoms.network import gateway
+from lxcext.lib.atoms.network import gateway
 
 
 class TestParseIpAddress(unittest.TestCase):

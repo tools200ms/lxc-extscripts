@@ -5,6 +5,7 @@
 build/
 venv/
 .venv/
+poetry.lock
 
 # idnore configuration files
 *.ini
